@@ -5,11 +5,11 @@
 #AutoIt3Wrapper_Outfile=WinCDP.exe
 #AutoIt3Wrapper_Compression=3
 #AutoIt3Wrapper_Res_Description=Cisco Discovery Protocol Analyser
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.3
+#AutoIt3Wrapper_Res_Fileversion=0.0.1.4
 #AutoIt3Wrapper_Res_LegalCopyright=Chris Hall 2010-2012
 #AutoIt3Wrapper_Res_requestedExecutionLevel=requireAdministrator
 #AutoIt3Wrapper_Res_Field=ProductName|WinCDP
-#AutoIt3Wrapper_Res_Field=ProductVersion|1.3
+#AutoIt3Wrapper_Res_Field=ProductVersion|1.4
 #AutoIt3Wrapper_Res_Field=OriginalFileName|WinCDP.exe
 #AutoIt3Wrapper_Run_AU3Check=n
 #AutoIt3Wrapper_AU3Check_Parameters=-d -w 1 -w 2 -w 3 -w 4 -w 5 -w 6
@@ -17,7 +17,7 @@
 ;===================================================================================================================================================================
 ; WinCDP - Cisco Discovery for Windows - Chris Hall 2010-2012
 ;===================================================================================================================================================================
-$VER = "1.3"
+$VER = "1.4"
 
 #include <GuiConstantsEx.au3>
 #include <WindowsConstants.au3>
