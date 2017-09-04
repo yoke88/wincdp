@@ -20,7 +20,7 @@ Global $headerArray[13][1]
 Global $isformatCSV=False
 Global $isformatCsvWithHeader=False
 Global $isfilterVirtualCard=False
-
+Global $isInteractive=False
 $headerArray[0][0]="AdapterName"
 $headerArray[1][0]="ProductName"
 $headerArray[2][0]="MacAddress"
@@ -57,6 +57,8 @@ if $cmdline[0] > 0 Then
 		 $isformatCsvWithHeader=True
 	  case "-noVirtual"
 		 $isfilterVirtualcard=True
+	  case "-i"
+		 $isInteractive=True
 	  case Else
 		 ;l($arg)
 		 print_help()
@@ -68,9 +70,9 @@ Else
     $isfilterVirtualCard=False
 EndIf
 if not $isfilterVirtualCard then
-   $colItems = $objWMIService.ExecQuery("select * from win32_networkadapter where netconnectionstatus=2 ", "WQL", $wbemFlagReturnImmediately + $wbemFlagForwardOnly)
+   $colItems = $objWMIService.ExecQuery("select * from win32_networkadapter where netconnectionstatus=2 and ServiceName <> 'VMSMP' ", "WQL", $wbemFlagReturnImmediately + $wbemFlagForwardOnly)
 Else
-   $colItems=$objWMIService.ExecQuery("select * from win32_networkadapter where netconnectionstatus=2  and  not productname like '%virtualbox%' ")
+   $colItems=$objWMIService.ExecQuery("select * from win32_networkadapter where netconnectionstatus=2 and ServiceName <> 'VMSMP'  and  not productname like '%virtualbox%' ")
 EndIf
 $colItems2 = $objWMIService.ExecQuery("SELECT * FROM Win32_NetworkAdapterConfiguration")
 
@@ -80,6 +82,13 @@ if not IsObj($colItems2) and not IsObj($colItems) then
 	Exit(1)
 Endif
 
+
+;~ if $isInteractive Then
+;~    local $c=0
+;~    for $item in $colItems
+;~ 	  l(
+;~    Next
+;~ EndIf
 
 local $i=0,$j
 
@@ -100,6 +109,7 @@ For $objItem In $colItems
 	Next
 	$i+=1
 Next
+
 
 
 GetAllNetworkCDP()
