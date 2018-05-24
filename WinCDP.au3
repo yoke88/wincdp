@@ -8,17 +8,17 @@ opt("TrayIconDebug",1)
 #AutoIt3Wrapper_Outfile=WinCDP.exe
 #AutoIt3Wrapper_Compression=3
 #AutoIt3Wrapper_Res_Description=Cisco Discovery Protocol Info Gather
-#AutoIt3Wrapper_Res_Fileversion=0.0.1.4
+#AutoIt3Wrapper_Res_Fileversion=1.6
 #AutoIt3Wrapper_Res_LegalCopyright=Chris Hall 2010-2012
 #AutoIt3Wrapper_Res_requestedExecutionLevel=requireAdministrator
 #AutoIt3Wrapper_Res_Field=ProductName|WinCDP
-#AutoIt3Wrapper_Res_Field=ProductVersion|1.4
+#AutoIt3Wrapper_Res_Field=ProductVersion|1.6
 #AutoIt3Wrapper_Res_Field=OriginalFileName|WinCDP.exe
 #AutoIt3Wrapper_Run_AU3Check=n
 #AutoIt3Wrapper_AU3Check_Parameters=-d -w 1 -w 2 -w 3 -w 4 -w 5 -w 6
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 
-$VER = "1.4"
+$VER = "1.6"
 
 #include <GuiConstantsEx.au3>
 #include <WindowsConstants.au3>
@@ -29,8 +29,7 @@ $VER = "1.4"
 #include <FileConstants.au3>
 #include <Array.au3>
 
-$WinCDPVer = "WinCDP - v"& $VER  & @YEAR
-
+$WinCDPVer = "WinCDP - v"& $VER & " ( Mod by yoke-msn@hotmail.com )"
 if IsAdmin() = 0 then
 	MsgBox(16,"Exiting","This program requires Local Admistrator rights")
 	Exit
@@ -110,16 +109,16 @@ If RegRead("HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policie
   EndIf
 
 GUICtrlCreateGroup("Port Info", 15, 130, 530, 170)
-GUICtrlCreateLabel("Switch Name:", 30, 150, 100, 20)
-GUICtrlCreateLabel("Port:", 30, 180, 100, 20)
-GUICtrlCreateLabel("VLAN:", 30, 210, 100, 20)
-GUICtrlCreateLabel("Switch IP:", 30, 240, 100, 20)
+GUICtrlCreateLabel("Switch Name:", 30, 150, 90, 20)
+GUICtrlCreateLabel("Port:", 30, 180, 90, 20)
+GUICtrlCreateLabel("VLAN:", 30, 210, 90, 20)
+GUICtrlCreateLabel("Switch IP:", 30, 240, 90, 20)
 GUICtrlCreateLabel("Model:", 280, 180, 100, 20)
 GUICtrlCreateLabel("Port Duplex:", 280, 210, 100, 20)
 GUICtrlCreateLabel("VTP Mgmt Domain:", 280, 240, 100, 20)
-GUICtrlCreateLabel("Mac Address:", 30, 270, 100, 20)
+GUICtrlCreateLabel("Mac Address:", 30, 270, 90, 20)
 GUICtrlCreateGroup("Status ", 15, 310, 530, 65)
-GUICtrlCreateLabel($WinCDPVer, 350, 380, 200, 20)
+GUICtrlCreateLabel($WinCDPVer, 200, 380, 400, 20)
 
 GUISetState()
 	While 1
@@ -131,7 +130,7 @@ GUISetState()
 			$hardware=$oArray[$index][1]
 			GUICtrlCreateLabel($Hardware, 145, 62, 350, 20)
 			ClearResults()
-			GUICtrlCreateLabel($oArray[$index][2], 140, 270, 120, 20)
+			GUICtrlCreateLabel($oArray[$index][2], 120, 270, 120, 20)
 	    Case $Get
 			If GUICtrlRead($Nic_Friendly) = "" Then
 			   MsgBox(64,"Invalid Selection", "Please select a network card using the dropdown")
@@ -165,7 +164,7 @@ Func GetCDP($Nic_Friendly)
 		$Secs = 1
 		$Status1 = GUICtrlCreateLabel("Running ... May take up to 60 seconds between CDP announcements ...", 40, 327, 400, 20 )
 		FileWriteLine($SaveFile, "MacAddress:	" & $oArray[$index][2])
-		GUICtrlCreateLabel($oArray[$index][2], 140, 270, 120, 20)
+		GUICtrlCreateLabel($oArray[$index][2], 120, 270, 140, 20)
 		FileWriteLine($SaveFile, "ComputerName:	" & @ComputerName)
 		$iBegin = TimerInit()
 		Do
@@ -191,34 +190,34 @@ Func GetCDP($Nic_Friendly)
 			 If StringInStr(FileReadLine($file, $line), "Device-ID (0x01)") Then
 				 $SwitchName = StringSplit(FileReadLine($file, $line), "'")
 				 $SwitchName = StringUpper($SwitchName[2])
-				 GUICtrlCreateLabel($SwitchName, 140, 150, 180, 20)
+				 GUICtrlCreateLabel($SwitchName, 120, 150, 200, 20)
 				 $oArray[$index][5] = $SwitchName
 				 FileWriteLine($SaveFile, "Switch Name:	" & $SwitchName)
 			 EndIf
 			 If StringInStr(FileReadLine($file, $line), "Port-ID (0x03)") Then
 				 $SwitchPort = StringSplit(FileReadLine($file, $line), "'")
-				 GUICtrlCreateLabel($SwitchPort[2], 140, 180, 120, 20)
+				 GUICtrlCreateLabel($SwitchPort[2], 120, 180, 140, 20)
 				 $oArray[$index][6]=$SwitchPort[2]
 				 FileWriteLine($SaveFile, "Switch Port:	" & $SwitchPort[2])
 			 EndIf
 			 If StringInStr(FileReadLine($file, $line), "VLAN ID (0x0a)") Then
 				 $VLAN = StringSplit(FileReadLine($file, $line), ":")
 				 $VLAN = StringStripWS($VLAN[3],8)
-				 GUICtrlCreateLabel($VLAN, 140, 210, 120, 20)
+				 GUICtrlCreateLabel($VLAN, 120, 210, 140, 20)
 				 $oArray[$index][7]= $VLAN
 				 FileWriteLine($SaveFile, "VLAN ID:	" & $VLAN)
 			 EndIf
 			 If StringInStr(FileReadLine($file, $line), "Address (0x02)") Then
 				 $SwitchIP = StringSplit(FileReadLine($file, $line), ")")
 				 $SwitchIP = StringStripWS($SwitchIP[3],8)
-				 GUICtrlCreateLabel($SwitchIP, 140, 240, 120, 20)
+				 GUICtrlCreateLabel($SwitchIP, 120, 240, 140, 20)
 				 $oArray[$index][8]=$SwitchIP
 				 FileWriteLine($SaveFile, "Switch IP:	" & $SwitchIP)
 			 EndIf
 			 If StringInStr(FileReadLine($file, $line), "Platform (0x06)") Then
 				 $SwitchModel = StringSplit(FileReadLine($file, $line), "'")
 				 $SwitchModel = StringTrimLeft (StringUpper($SwitchModel[2]), 6)
-				 GUICtrlCreateLabel($SwitchModel, 390, 180, 120, 20)
+				 GUICtrlCreateLabel($SwitchModel, 390, 180, 140, 20)
 				 $oArray[$index][9]=$SwitchModel
 				 FileWriteLine($SaveFile, "Switch Model:	" & $SwitchModel)
 			 EndIf
@@ -226,13 +225,13 @@ Func GetCDP($Nic_Friendly)
 				 $Duplex = StringSplit(FileReadLine($file, $line), ":")
 				 $Duplex = StringLower(StringStripWS($Duplex[3],8))
 				 $Duplex = _StringProper($Duplex)
-				 GUICtrlCreateLabel($Duplex, 390, 210, 120, 20)
+				 GUICtrlCreateLabel($Duplex, 390, 210, 140, 20)
 				 $oArray[$index][10]=$Duplex
 				 FileWriteLine($SaveFile, "Switch Duplex:	" & $Duplex)
 			 EndIf
 			 If StringInStr(FileReadLine($file, $line), "VTP Management Domain (0x09)") Then
 				 $VTP = StringSplit(FileReadLine($file, $line), "'")
-				 GUICtrlCreateLabel($VTP[2], 390, 240, 120, 20)
+				 GUICtrlCreateLabel($VTP[2], 390, 240, 140, 20)
 				 $oArray[$i][10]=$VTP[2]
 				 FileWriteLine($SaveFile, "VTP Mgmt:	" & $VTP[2])
 			 EndIf
@@ -253,14 +252,14 @@ Func GetCDP($Nic_Friendly)
 EndFunc
 
 Func ClearResults()
-   GUICtrlCreateLabel("", 140, 150, 180, 20)
-   GUICtrlCreateLabel("", 140, 180, 120, 20)
-   GUICtrlCreateLabel("", 140, 210, 120, 20)
-   GUICtrlCreateLabel("", 140, 240, 120, 20)
-   GUICtrlCreateLabel("", 390, 180, 120, 20)
-   GUICtrlCreateLabel("", 390, 210, 120, 20)
-   GUICtrlCreateLabel("", 390, 240, 120, 20)
-   GUICtrlCreateLabel("", 140, 270, 120, 20)
+   GUICtrlCreateLabel("", 120, 150, 200, 20)
+   GUICtrlCreateLabel("", 120, 180, 140, 20)
+   GUICtrlCreateLabel("", 120, 210, 140, 20)
+   GUICtrlCreateLabel("", 120, 240, 140, 20)
+   GUICtrlCreateLabel("", 390, 180, 140, 20)
+   GUICtrlCreateLabel("", 390, 210, 140, 20)
+   GUICtrlCreateLabel("", 390, 240, 140, 20)
+   GUICtrlCreateLabel("", 120, 270, 140, 20)
 EndFunc
 
  Func SaveData()
